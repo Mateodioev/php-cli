@@ -54,15 +54,21 @@ class App
     /**
      * @param array $argv
      * @param string $defaultCommand
+     * @param $callback Function to run when command not found
      */
-    public function run(array $argv, string $defaultCommand = help)
+    public function run(array $argv, string $defaultCommand = help, $callback = null)
     {
         $cmdName = $argv[1] ?? $defaultCommand;
         $command = $this->getCommand($cmdName);
 
         if ($command == null) {
-            $this->getPrinter()->display(Color::Bg(150, Color::Fg(232, 'Command "' . $cmdName . '" not found')));
-            exit();
+            if ($callback != null) {
+                call_user_func($callback);
+                exit();
+            } else {
+                $this->getPrinter()->display(Color::Bg(150, Color::Fg(232, 'Command "' . $cmdName . '" not found')));
+                exit();
+            }
         }
 
         call_user_func($command, $argv);

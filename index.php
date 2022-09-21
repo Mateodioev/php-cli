@@ -15,4 +15,6 @@ $app->register('name', function() use ($app) {
     $app->getPrinter()->clear()
         ->display(Color::Fg(82, 'Hello ' . $name));
 });
-$app->run($argv, 'help');
+$app->run($argv, 'help', function () use ($app) {
+    $app->getPrinter()->display('Example of callback function when command not found');
+});
