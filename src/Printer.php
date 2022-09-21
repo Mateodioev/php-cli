@@ -36,4 +36,11 @@ class Printer
             ->newLine()
             ->newLine();
     }
+
+    public function read(?string $message = null)
+    {
+        $txt = readline($message);
+        readline_add_history($txt);
+        return trim($txt);
+    }
 }

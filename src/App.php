@@ -55,7 +55,7 @@ class App
      * @param array $argv
      * @param string $defaultCommand
      */
-    public function run(array $argv, string $defaultCommand = "help")
+    public function run(array $argv, string $defaultCommand = help)
     {
         $cmdName = $argv[1] ?? $defaultCommand;
         $command = $this->getCommand($cmdName);

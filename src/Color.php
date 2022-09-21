@@ -6,6 +6,7 @@ use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
 
 /**
  * Color decorator
+ * @see https://packagist.org/packages/php-parallel-lint/php-console-color
  */
 class Color
 {

@@ -1,0 +1,14 @@
+{
+    "name": "mateodioev/php-easy-cli",
+    "description": "Create cli apps",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mateodioev\\PhpEasyCli\\": "src/"
+        }
+    },
+    "require": {
+        "php-parallel-lint/php-console-color": "^1.0"
+    }
+}
