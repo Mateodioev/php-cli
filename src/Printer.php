@@ -46,4 +46,18 @@ class Printer
         readline_add_history($txt);
         return trim($txt);
     }
+
+    public function readPassword($prompt='Write your password: ', $hide=false, int $maxLength = 100): string
+    {
+        $this->out($prompt);
+
+        $s = ($hide) ? '-s' : '';
+
+        $process=popen("read $s; echo \$REPLY","r");
+        $input=fgets($process, $maxLength);
+        pclose($process);
+
+        if($hide) $this->out($prompt);
+        return $input;
+    }
 }

@@ -8,14 +8,17 @@ use function array_keys;
 class App
 {
     private Printer $printer;
+    private Context $context;
+
     /**
      * @var array<string,callable>
      */
     protected array $register = [];
 
-    public function __construct()
+    public function __construct(array $args)
     {
         $this->printer = new Printer();
+        $this->context = new Context($args);
     }
 
     public function getPrinter(): Printer
@@ -25,9 +28,12 @@ class App
 
     /**
      * Register new command
+     * @param string $name Command name
+     * @param callable $callable Function to run when command is called. The function must receive Context and Printer as parameters
+     *
      * @throws \Exception
      */
-    public function register(string $name, $callable): App
+    public function register(string $name, callable $callable): App
     {
         if (isset($this->register[$name])) {
             throw new \Exception('Duplicate command');
@@ -59,20 +65,29 @@ class App
      * @param callable|null $callback Function to run when command not found
      * @throws InvalidStyleException
      */
-    public function run(array $argv, string $defaultCommand = 'help', ?callable $callback = null)
+    public function run(string $defaultCommand = 'help', ?callable $callback = null): void
     {
-        $cmdName = $argv[1] ?? $defaultCommand;
+        $cmdName = $this->context->get('input')[1] ?? $defaultCommand;
         $command = $this->getCommand($cmdName);
 
         if ($command == null) {
             if ($callback != null) {
-                call_user_func($callback);
+                $this->executeCommand($callback);
             } else {
                 $this->getPrinter()->display(Color::Bg(150, Color::Fg(232, 'Command "' . $cmdName . '" not found')));
             }
             exit();
         }
 
-        call_user_func($command, $argv);
+        $this->executeCommand($command);
+    }
+
+    private function executeCommand(callable $command): void
+    {
+        try {
+            call_user_func($command, $this->context, $this->printer);
+        } catch (\InvalidArgumentException $e) {
+            $this->getPrinter()->display(Color::Bg(150, Color::Fg(232, $e->getMessage())));
+        }
     }
 }
