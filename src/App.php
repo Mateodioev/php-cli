@@ -60,7 +60,6 @@ class App
     }
 
     /**
-     * @param array $argv
      * @param string $defaultCommand
      * @param callable|null $callback Function to run when command not found
      * @throws InvalidStyleException

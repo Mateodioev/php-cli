@@ -63,7 +63,7 @@ class Context
         if ($description !== null) {
             return 'Missing argument: ' . $key . ' - ' . $description;
         } else {
-            return 'Key ' . $key . ' not found';
+            return 'Missing argument: ' . $key;
         }
     }
 }
