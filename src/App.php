@@ -7,23 +7,24 @@ use function array_keys;
 class App
 {
     private Printer $printer;
-    protected $register = [];
+    /**
+     * @var array<string,callable>
+     */
+    protected array $register = [];
 
     public function __construct()
     {
         $this->printer = new Printer();
     }
 
-    /**
-     * @return Printer
-     */
-    public function getPrinter()
+    public function getPrinter(): Printer
     {
         return $this->printer;
     }
 
     /**
      * Register new command
+     * @throws \Exception
      */
     public function register(string $name, $callable): App
     {
@@ -44,9 +45,9 @@ class App
     }
 
     /**
-     * Return callable function if the command is registeres
+     * Return callable function if the command is registered
      */
-    public function getCommand(string $name)
+    public function getCommand(string $name): ?callable
     {
         return $this->register[$name] ?? null;
     }
@@ -54,9 +55,9 @@ class App
     /**
      * @param array $argv
      * @param string $defaultCommand
-     * @param $callback Function to run when command not found
+     * @param callable|null $callback Function to run when command not found
      */
-    public function run(array $argv, string $defaultCommand = help, $callback = null)
+    public function run(array $argv, string $defaultCommand = 'help', ?callable $callback = null)
     {
         $cmdName = $argv[1] ?? $defaultCommand;
         $command = $this->getCommand($cmdName);
@@ -64,11 +65,10 @@ class App
         if ($command == null) {
             if ($callback != null) {
                 call_user_func($callback);
-                exit();
             } else {
                 $this->getPrinter()->display(Color::Bg(150, Color::Fg(232, 'Command "' . $cmdName . '" not found')));
-                exit();
             }
+            exit();
         }
 
         call_user_func($command, $argv);

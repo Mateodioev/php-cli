@@ -3,6 +3,7 @@
 namespace Mateodioev\PhpEasyCli;
 
 use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
+use PHP_Parallel_Lint\PhpConsoleColor\InvalidStyleException;
 
 /**
  * Color decorator
@@ -10,7 +11,7 @@ use PHP_Parallel_Lint\PhpConsoleColor\ConsoleColor;
  */
 class Color
 {
-    protected static $consoleColor;
+    protected static ?ConsoleColor $consoleColor = null;
 
     private static function getInstance(): ConsoleColor
     {
@@ -21,6 +22,9 @@ class Color
         return self::$consoleColor;
     }
 
+    /**
+     * @throws InvalidStyleException
+     */
     public static function apply(string $style, string $text): string
     {
         return self::getInstance()->apply($style, $text);
@@ -29,6 +33,7 @@ class Color
     /**
      * Background color
      * @param int $colorCode 0 - 255
+     * @throws InvalidStyleException
      */
     public static function Bg(int $colorCode, string $text): string
     {
@@ -38,6 +43,7 @@ class Color
     /**
      * Foreground color
      * @param int $colorCode 0 - 255
+     * @throws InvalidStyleException
      */
     public static function Fg(int $colorCode, string $text): string
     {

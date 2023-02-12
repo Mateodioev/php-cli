@@ -2,7 +2,7 @@
 
 namespace Mateodioev\PhpEasyCli;
 
-use function system;
+use function system, readline, readline_add_history, trim;
 
 class Printer
 {
@@ -37,7 +37,10 @@ class Printer
             ->newLine();
     }
 
-    public function read(?string $message = null)
+    /**
+     * Read user input from terminal
+     */
+    public function read(?string $message = null): string
     {
         $txt = readline($message);
         readline_add_history($txt);
